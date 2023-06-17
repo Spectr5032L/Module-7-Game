@@ -173,6 +173,18 @@ public class Game : MonoBehaviour
 	}
 	private void revCell(Vector3Int pos)
 	{
+		foreach (Vector3Int adjacency in cellsToCheck)
+        {
+            Vector3Int aPos = adjacency + pos;
+            if (isInBounds(aPos))
+            {
+                if (gameGrid[aPos.x, aPos.y, aPos.z] != null)
+                {
+                    gameGrid[aPos.x, aPos.y, aPos.z].SetActive(true);
+                }
+            }
+        }
+
 		GameObject c = gameGrid[pos.x, pos.y, pos.z];
 		Destroy(c.GetComponent<BoxCollider>());
 		int dangerLevel = c.GetComponent<Cell>().getDangerLevel();
@@ -187,10 +199,13 @@ public class Game : MonoBehaviour
 				Vector3Int newPos = pos + adj;
 				if (isInBounds(newPos))
 				{
-					if (!RevealCellIndiciesOnStack[newPos.x, newPos.y, newPos.z])
+					if (gameGrid[newPos.x, newPos.y, newPos.z] != null)
 					{
-						RevealCellIndiciesOnStack[newPos.x, newPos.y, newPos.z] = true;
-						operationsToDo.Push(newPos);
+						if (!RevealCellIndiciesOnStack[newPos.x, newPos.y, newPos.z])
+						{
+							RevealCellIndiciesOnStack[newPos.x, newPos.y, newPos.z] = true;
+							operationsToDo.Push(newPos);
+						}
 					}
 				}
 			}
@@ -198,6 +213,10 @@ public class Game : MonoBehaviour
 		else
 		{
 			MeshRenderer m = c.GetComponentInChildren<MeshRenderer>();
+			if (m == null)
+			{
+				return;
+			}
 			switch (dangerLevel)
 			{
 				case -1:
