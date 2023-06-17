@@ -3,8 +3,6 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
 	Game gameGrid;
-	[SerializeField] private LayerMask gridLayer;
-	[SerializeField] private LayerMask menuLayer;
 	[SerializeField] public Material unknown;
 	void Start()
 	{
@@ -41,9 +39,6 @@ public class InputHandler : MonoBehaviour
 					c.leftClicked();
 				}
 			}
-			else
-			{
-			}
 		}
 
 		if (Input.GetButtonUp("RightClick"))
@@ -63,7 +58,7 @@ public class InputHandler : MonoBehaviour
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, 1000f, gridLayer))
+		if (Physics.Raycast(ray, out hit, 1000f))
 		{
 			return hit.collider.gameObject.GetComponent<Cell>();
 		}
